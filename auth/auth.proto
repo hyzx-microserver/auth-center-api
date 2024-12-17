@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "user/v1;v1";
+
+service AuthService {
+  // 验证用户身份（例如账号密码或 Token）
+  rpc Authenticate(AuthRequest) returns (AuthResponse);
+
+  // 授权用户执行某个操作
+  rpc Authorize(AuthzRequest) returns (AuthzResponse);
+}
+
+message AuthRequest {
+  string token = 1;
+}
+
+message AuthResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message AuthzRequest {
+  string token = 1;
+  string action = 2;
+}
+
+message AuthzResponse {
+  bool authorized = 1;
+  string message = 2;
+}
