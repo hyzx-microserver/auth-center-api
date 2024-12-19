@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "auth-service/api/auth/v1;v1";
+
+// 对外权限校验接口
+service AuthService {
+rpc Authorize(AuthorizeRequest) returns (AuthorizeResponse);
+}
+
+// 内部使用的权限管理接口
+service AuthInternalService {
+// 手动同步权限规则
+rpc SyncPermissions(SyncPermissionsRequest) returns (SyncPermissionsResponse);
+}
+
+// 请求和响应结构
+message AuthorizeRequest {
+string user_id = 1;   // 用户 ID
+string resource = 2;  // 资源名称
+string action = 3;    // 操作名称
+}
+
+message AuthorizeResponse {
+bool allowed = 1;     // 是否允许
+}
+
+message SyncPermissionsRequest {
+enum SyncType {
+USER = 0;         // 同步单个用户权限
+ALL = 1;          // 同步所有权限规则
+}
+
+SyncType sync_type = 1;    // 同步类型
+string user_id = 2;        // 用户 ID (当 sync_type 为 USER 时必填)
+string reason = 3;         // 同步原因
+}
+
+message SyncPermissionsResponse {
+bool success = 1;          // 是否成功
+}
