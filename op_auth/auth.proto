@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+option go_package = "auth-service/api/op_auth/v1;v1";
+
+import "github.com/hyzx-microserver/b2c-common-api/proto/common.proto";
+
+service AuthService {
+  // 注册接口
+  rpc Register(RegisterRequest) returns (common.RespDTO);
+
+  // 登录接口
+  rpc Login(LoginRequest) returns (common.RespDTO);
+
+  // 验证 Token 接口
+  rpc ValidateToken(ValidateTokenRequest) returns (common.RespDTO);
+
+  // 重置密码接口
+  rpc ResetPassword(ResetPasswordRequest) returns (common.RespDTO);
+
+  // 登出接口
+  rpc Logout(LogoutRequest) returns (common.RespDTO);
+}
+
+message RegisterRequest {
+  string username = 1;
+  string phone = 2;
+  string password = 3;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message LoginRequest {
+  string login_type = 1; // "password" or "phone"
+  string phone = 2;
+  string password = 3;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string token = 2;
+  string message = 3;
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool valid = 1;
+  string user_id = 2;
+}
+
+message ResetPasswordRequest {
+  string phone = 1;
+  string new_password = 2;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message LogoutRequest {
+  string token = 1;
+}
+
+message LogoutResponse {
+  bool success = 1;
+}
